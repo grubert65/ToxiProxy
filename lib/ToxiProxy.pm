@@ -1,10 +1,92 @@
 package ToxiProxy;
 use Moose;
 use RestAPI;
+use Try::Tiny;
 
-has 'host' => ( is => 'rw' );
-has 'port' => ( is => 'rw', isa => 'Int' );
+has 'host'      => ( is => 'rw', isa => 'Str', default => 'localhost' );
+has 'port'      => ( is => 'rw', isa => 'Int', default => 8474 );
+has 'client'    => ( is => 'ro', isa => 'RestAPI', lazy => 1, builder => '_get_client' );
 
+sub _get_client {
+    my $self = shift;
+    RestAPI->new(
+        scheme  => 'http',
+        server  => "$self->{host}:$self->{port}"
+    );
+}
+
+
+# Returns the list of existing proxies and their toxics
+sub get_proxies {
+    my $self = shift;
+}
+
+# create the passed ToxiProxy::Proxy object on the server
+sub create_proxy {
+    my ($self, $proxy) = @_;
+}
+
+# Create or replace a list of proxy objects
+sub populate {
+    my ( $self, $proxies ) = @_;
+}
+
+# Show the proxy with all its active toxics
+sub get_proxy {
+    my ( $self, $proxy_name ) = @_;
+}
+
+# Update a proxy's fields
+sub update_proxy {
+    my ( $self, $proxy ) = @_;
+}
+
+# deletes a proxy
+sub delete_proxy {
+    my ( $self, $proxy_name ) = @_;
+}
+
+# gets the list of active toxics
+sub get_toxics {
+    my ( $self, $proxy_name ) = @_;
+}
+
+# Create a new toxic
+sub add_toxic {
+    my ( $self, $proxy, $toxic ) = @_;
+}
+
+# Get an active toxic's fields
+sub get_toxic {
+    my ( $self, $proxy_name, $toxic_name) = @_;
+}
+
+# Update an active toxic
+sub update_toxic {
+    my ($self,  $proxy_name, $toxic) = @_;
+}
+
+# Remove an active toxic
+sub delete_toxic {
+    my ( $self, $proxy_name, $toxic_name ) = @_;
+}
+
+# Enable all proxies and remove all active toxics
+sub reset {
+    my $self = shift;
+}
+
+# Returns the server version number
+sub version {
+    my $self = shift;
+    $self->client->query('version');
+    return $self->client->do();
+}
+
+1;
+
+
+__END__
 
 #============================================================= -*-perl-*-
 
@@ -82,10 +164,8 @@ Perhaps a little code snippet.
 
 =head1 EXPORT
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+None.
 
-=head1 SUBROUTINES/METHODS
 
 =head1 AUTHOR
 
