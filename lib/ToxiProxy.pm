@@ -1,8 +1,12 @@
 package ToxiProxy;
+use Moose;
+use RestAPI;
 
-use 5.006;
-use strict;
-use warnings;
+has 'host' => ( is => 'rw' );
+has 'port' => ( is => 'rw', isa => 'Int' );
+
+
+#============================================================= -*-perl-*-
 
 =head1 NAME
 
@@ -24,15 +28,58 @@ Quick summary of what the module does.
 Perhaps a little code snippet.
 
     use ToxiProxy;
-
     
     # get a toxiproxy client, it will
     # use defaults for host and port
     # (localhost, 8474)
-    my $server = ToxiProxy->new();
+    my $client = ToxiProxy->new();
 
     # or 
-    my $server = Toxi
+    my $client = ToxiProxy->new(
+        host    => $host,
+        port    => $port
+    );
+
+    # Returns the list of existing proxies and their toxics
+    my $proxies = $client->get_proxies();
+
+    # create the passed ToxiProxy::Proxy object on the server
+    $client->create_proxy($proxy);
+
+    # Create or replace a list of proxy objects
+    $client->populate([p1, p2]);
+
+    # Show the proxy with all its active toxics
+    my $proxy = $client->get_proxy($proxy_name)                 : 
+
+    # Update a proxy's fields
+    $client->update_proxy($proxy);
+
+    # deletes a proxy
+    $client->delete_proxy( $proxy_name );
+
+    # gets the list of active toxics
+    my $toxics = $client->get_toxics( $proxy_name );
+
+    # Create a new toxic
+    $client->add_toxic($proxy, $toxic);
+
+    # Get an active toxic's fields
+    my $toxic = $client->get_toxic($proxy_name, $toxic_name);
+
+    # Update an active toxic
+    $client->update_toxic( $proxy_name, $toxic); 
+
+    # Remove an active toxic
+    $client->delete_toxic( $proxy_name, $toxic_name );
+
+    # Enable all proxies and remove all active toxics
+    $client->reset();
+
+    # Returns the server version number
+    my $version = $client->version();
+
+
 =head1 EXPORT
 
 A list of functions that can be exported.  You can delete this section
@@ -40,31 +87,9 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =head1 SUBROUTINES/METHODS
 
-=head2 function1
-
-=cut
-
-sub function1 {
-}
-
-=head2 function2
-
-=cut
-
-sub function2 {
-}
-
 =head1 AUTHOR
 
 Marco Masetti, C<< <marco.masetti at sky.uk> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-toxiproxy at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=ToxiProxy>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-
 
 
 =head1 SUPPORT
@@ -74,49 +99,17 @@ You can find documentation for this module with the perldoc command.
     perldoc ToxiProxy
 
 
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=ToxiProxy>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/ToxiProxy>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/ToxiProxy>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/ToxiProxy/>
-
-=back
-
-
-=head1 ACKNOWLEDGEMENTS
-
-
 =head1 LICENSE AND COPYRIGHT
 
 Copyright 2018 Marco Masetti.
 
-This program is free software; you can redistribute it and/or modify it
-under the terms of the the GNU General Public License (2.0). 
+This module is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself. See perldoc perlartistic.
 
-Disclaimer of Warranty: THE PACKAGE IS PROVIDED BY THE COPYRIGHT HOLDER
-AND CONTRIBUTORS "AS IS' AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.
-THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE, OR NON-INFRINGEMENT ARE DISCLAIMED TO THE EXTENT PERMITTED BY
-YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR
-CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR
-CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE,
-EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 =cut
 
-1; # End of ToxiProxy
+#========================================================================
