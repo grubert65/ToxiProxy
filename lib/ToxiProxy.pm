@@ -85,6 +85,7 @@ sub version {
 
 1;
 
+__PACKAGE__->meta->make_immutable();
 
 __END__
 
