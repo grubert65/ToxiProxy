@@ -1,11 +1,13 @@
 package ToxiProxy;
-use Moose;
+use Moo;
+use Types::Standard qw( Str Int );
 use RestAPI;
 use Try::Tiny;
+use Data::Printer;
 
-has 'host'      => ( is => 'rw', isa => 'Str', default => 'localhost' );
-has 'port'      => ( is => 'rw', isa => 'Int', default => 8474 );
-has 'client'    => ( is => 'ro', isa => 'RestAPI', lazy => 1, builder => '_get_client' );
+has 'host'      => ( is => 'rw', isa => Str, default => 'localhost' );
+has 'port'      => ( is => 'rw', isa => Int, default => 8474 );
+has 'client'    => ( is => 'ro', lazy => 1, builder => '_get_client' );
 
 sub _get_client {
     my $self = shift;
@@ -17,8 +19,22 @@ sub _get_client {
 
 
 # Returns the list of existing proxies and their toxics
+# or undef in case of errors
 sub get_proxies {
     my $self = shift;
+    try {
+        $self->client->query('proxies');
+        $self->client->encoding('application/json');
+        my $data = $self->client->do();
+        p $data;
+        my $proxies;
+        foreach ( @$data ) {
+
+        }
+        return $data;
+    } catch {
+        return undef;
+    }
 }
 
 # create the passed ToxiProxy::Proxy object on the server
