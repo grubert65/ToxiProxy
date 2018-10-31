@@ -13,7 +13,8 @@ sub _get_client {
     my $self = shift;
     RestAPI->new(
         scheme  => 'http',
-        server  => "$self->{host}:$self->{port}"
+        server  => "$self->{host}:$self->{port}",
+        timeout => 1
     );
 }
 
@@ -26,11 +27,9 @@ sub get_proxies {
         $self->client->query('proxies');
         $self->client->encoding('application/json');
         my $data = $self->client->do();
+        $data = [$data] unless ref $data eq 'ARRAY';
         p $data;
-        my $proxies;
-        foreach ( @$data ) {
-
-        }
+        # TODO : we should convert data into an array of Proxy...
         return $data;
     } catch {
         return undef;
