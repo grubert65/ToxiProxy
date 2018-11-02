@@ -14,6 +14,7 @@ sub _get_client {
     RestAPI->new(
         scheme  => 'http',
         server  => "$self->{host}:$self->{port}",
+        timeout => 1,
     );
 }
 
