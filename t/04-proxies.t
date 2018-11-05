@@ -4,9 +4,12 @@ use Test::More;
 
 BEGIN {
     use_ok('ToxiProxy');
+    use_ok('ToxiProxy::ServerMock');
 }
 
-ok( my $p = ToxiProxy->new(), 'new');
-ok( my $proxies = $p->get_proxies(), 'get_proxies');
+ok( my $sm = ToxiProxy::ServerMock->new(), 'got a ToxiProxy::ServerMock obj');
+ok( my $t = ToxiProxy->new(), 'new');
+ok( $t->client->ua( $sm->get_ua()), 'get_ua');
+ok( my $proxies = $t->get_proxies(), 'get_proxies');
 
 done_testing;

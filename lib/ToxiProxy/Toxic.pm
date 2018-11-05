@@ -14,6 +14,16 @@ sub BUILD {
     }
 }
 
+sub TO_JSON {
+    my $self = shift;
+    my %h;
+
+    foreach ( qw( name type stream toxicity attributes ) ) {
+        $h{ $_ } = $self->$_ if defined $self->$_;
+    }
+    return \%h;
+}
+
 1;
 
 __END__

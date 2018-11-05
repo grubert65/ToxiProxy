@@ -9,8 +9,19 @@ subtype 'Fqdn',
 
 has 'name'                   => ( is => 'rw', required => 1 );
 has [ 'listen', 'upstream' ] => ( is => 'rw', isa => 'Fqdn', required => 1 );
-has 'enabled'                => ( is => 'rw', isa => 'Int', default => 1 );
+has 'enabled'                => ( is => 'rw', isa => 'ScalarRef[Int]', default => sub { return \1 } );
 has 'toxics'                 => ( is => 'ro', isa => 'ArrayRef[ToxiProxy::Toxic]' );
+
+sub TO_JSON {
+    my $self = shift;
+    my %h;
+
+    foreach ( qw( name listen upstream enabled toxics ) ) {
+        $h{ $_ } = $self->$_ if defined $self->$_;
+    }
+    return \%h;
+}
+
 
 1;
 

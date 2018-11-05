@@ -1,9 +1,11 @@
 package ToxiProxy;
+our $VERSION = '0.01';
 use Moo;
 use Types::Standard qw( Str Int );
 use RestAPI;
 use Try::Tiny;
 use Data::Printer;
+use ToxiProxy::Proxy;
 
 has 'host'      => ( is => 'rw', isa => Str, default => 'localhost' );
 has 'port'      => ( is => 'rw', isa => Int, default => 8474 );
@@ -23,22 +25,25 @@ sub _get_client {
 # or undef in case of errors
 sub get_proxies {
     my $self = shift;
-    try {
-        $self->client->query('proxies');
-        $self->client->encoding('application/json');
-        my $data = $self->client->do();
-        $data = [$data] unless ref $data eq 'ARRAY';
-        p $data;
-        # TODO : we should convert data into an array of Proxy...
-        return $data;
-    } catch {
-        return undef;
-    }
+
+    $self->client->query('proxies');
+    my $data = $self->client->do();
+    $data = [$data] unless ref $data eq 'ARRAY';
+    # TODO : we should convert data into an array of Proxy...
+    return $data;
 }
 
 # create the passed ToxiProxy::Proxy object on the server
+# returns 1/undef in case of errors
 sub create_proxy {
     my ($self, $proxy) = @_;
+
+    $self->client->http_verb('POST');
+    $self->client->query('proxies');
+    $self->client->encoding('application/json');
+    $self->client->payload( $proxy );
+    my $data = $self->client->do() or return undef;;
+    return $data;
 }
 
 # Create or replace a list of proxy objects
@@ -113,11 +118,6 @@ ToxiProxy - The great new ToxiProxy!
 =head1 VERSION
 
 Version 0.01
-
-=cut
-
-our $VERSION = '0.01';
-
 
 =head1 SYNOPSIS
 

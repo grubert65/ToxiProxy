@@ -1,9 +1,23 @@
 Changes
+ignore.txt
 lib/ToxiProxy.pm
+lib/ToxiProxy/Proxy.pm
+lib/ToxiProxy/ServerMock.pm
+lib/ToxiProxy/Toxic.pm
+LICENSE
 Makefile.PL
 MANIFEST			This list of files
 README
+scripts/toxiproxy-version.pl
 t/00-load.t
+t/001-test-to-json.t
+t/01-proxy.t
+t/02-toxic.t
+t/03-version.t
+t/04-proxies.t
+t/05-post-proxies.t
+t/06-test-payload-encoding.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
+xt/boilerplate.t
