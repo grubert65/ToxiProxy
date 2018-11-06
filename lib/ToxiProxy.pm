@@ -14,9 +14,10 @@ has 'client'    => ( is => 'ro', lazy => 1, builder => '_get_client' );
 sub _get_client {
     my $self = shift;
     RestAPI->new(
-        scheme  => 'http',
-        server  => "$self->{host}:$self->{port}",
-        timeout => 1,
+        scheme   => 'http',
+        server   => "$self->{host}:$self->{port}",
+        encoding => 'application/json',
+        timeout  => 1,
     );
 }
 
@@ -26,7 +27,9 @@ sub _get_client {
 sub get_proxies {
     my $self = shift;
 
+    $self->client->http_verb('GET');
     $self->client->query('proxies');
+    $self->client->payload( undef );
     my $data = $self->client->do();
     $data = [$data] unless ref $data eq 'ARRAY';
     # TODO : we should convert data into an array of Proxy...
@@ -40,7 +43,6 @@ sub create_proxy {
 
     $self->client->http_verb('POST');
     $self->client->query('proxies');
-    $self->client->encoding('application/json');
     $self->client->payload( $proxy );
     my $data = $self->client->do() or return undef;;
     return $data;
@@ -49,11 +51,23 @@ sub create_proxy {
 # Create or replace a list of proxy objects
 sub populate {
     my ( $self, $proxies ) = @_;
+
+    $self->client->http_verb('POST');
+    $self->client->query('populate');
+    $self->client->payload( $proxies );
+    my $data = $self->client->do() or return undef;;
+    return $data;
 }
 
 # Show the proxy with all its active toxics
 sub get_proxy {
     my ( $self, $proxy_name ) = @_;
+
+    $self->client->http_verb('GET');
+    $self->client->query("proxies/$proxy_name");
+    $self->client->payload( undef );
+    # TODO : we should convert data into an array of Proxy...
+    $self->client->do();
 }
 
 # Update a proxy's fields
