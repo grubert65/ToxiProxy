@@ -37,7 +37,7 @@ sub get_ua {
     $ua->map_response( 
         sub{
             my $r = shift;
-            return 1 if $r->method eq 'POST' && $r->uri =~ m|proxies|;
+            return 1 if $r->method eq 'POST' && $r->uri =~ m|proxies(/{0,1})$|;
         },
         HTTP::Response->new('201','Created', 
             ['Content-Type' => 'application/json'],
@@ -84,6 +84,23 @@ sub get_ua {
                 "listen"=> "127.0.0.1:8090",
                 "upstream"=> "localhost:8080",
                 "enabled"=> \1,
+                "toxics"=> []
+          })
+    ));
+
+    # POST /proxies/{proxy}
+    $ua->map_response( 
+        sub{
+            my $r = shift;
+            return 1 if $r->method eq 'POST' && $r->uri =~ m|proxies/(\w+)$|;
+        },
+        HTTP::Response->new('200','OK', 
+            ['Content-Type' => 'application/json'],
+            encode_json({
+                "name"=> "p1",
+                "listen"=> "127.0.0.1:8090",
+                "upstream"=> "localhost:8080",
+                "enabled"=> \0,
                 "toxics"=> []
           })
     ));

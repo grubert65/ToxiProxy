@@ -44,8 +44,7 @@ sub create_proxy {
     $self->client->http_verb('POST');
     $self->client->query('proxies');
     $self->client->payload( $proxy );
-    my $data = $self->client->do() or return undef;;
-    return $data;
+    $self->client->do();
 }
 
 # Create or replace a list of proxy objects
@@ -55,8 +54,7 @@ sub populate {
     $self->client->http_verb('POST');
     $self->client->query('populate');
     $self->client->payload( $proxies );
-    my $data = $self->client->do() or return undef;;
-    return $data;
+    $self->client->do();
 }
 
 # Show the proxy with all its active toxics
@@ -72,7 +70,12 @@ sub get_proxy {
 
 # Update a proxy's fields
 sub update_proxy {
-    my ( $self, $proxy ) = @_;
+    my ( $self, $proxy_name, $proxy_fields ) = @_;
+
+    $self->client->http_verb('POST');
+    $self->client->query("proxies/$proxy_name");
+    $self->client->payload( $proxy_fields );
+    $self->client->do();
 }
 
 # deletes a proxy
