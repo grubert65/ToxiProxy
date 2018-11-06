@@ -16,7 +16,9 @@ ok( my $proxy = ToxiProxy::Proxy->new(
         upstream=> 'localhost:8080',
         enabled => \1
     ), 'new');
-ok( my $proxies = $p->create_proxy($proxy), 'create_proxies');
+ok( my $created = $p->create_proxy($proxy), 'create_proxies');
+is( ref $created, 'HASH', 'got right data type back' );
+is( $created->{name}, $proxy->{name}, 'got right data back' );
 
 done_testing;
 
