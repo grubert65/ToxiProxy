@@ -81,6 +81,12 @@ sub update_proxy {
 # deletes a proxy
 sub delete_proxy {
     my ( $self, $proxy_name ) = @_;
+
+    $self->client->http_verb('DELETE');
+    $self->client->query("proxies/$proxy_name");
+    $self->client->payload( undef );
+    $self->client->do();
+    return $self->client->response->code;
 }
 
 # gets the list of active toxics

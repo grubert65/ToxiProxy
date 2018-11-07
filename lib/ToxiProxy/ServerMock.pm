@@ -105,6 +105,15 @@ sub get_ua {
           })
     ));
 
+    # DELETE /proxies/{proxy}
+    $ua->map_response( 
+        sub{
+            my $r = shift;
+            return 1 if $r->method eq 'DELETE' && $r->uri =~ m|proxies/(\w+)$|;
+        },
+        HTTP::Response->new('204','No Content'
+    ));
+
     return $ua;
 }
 
