@@ -92,11 +92,21 @@ sub delete_proxy {
 # gets the list of active toxics
 sub get_toxics {
     my ( $self, $proxy_name ) = @_;
+
+    $self->client->http_verb('GET');
+    $self->client->query("proxies/$proxy_name/toxics");
+    $self->client->payload( undef );
+    $self->client->do();
 }
 
 # Create a new toxic
 sub add_toxic {
-    my ( $self, $proxy, $toxic ) = @_;
+    my ( $self, $proxy_name, $toxic ) = @_;
+
+    $self->client->http_verb('POST');
+    $self->client->query("proxies/$proxy_name/toxics");
+    $self->client->payload( $toxic );
+    $self->client->do();
 }
 
 # Get an active toxic's fields
