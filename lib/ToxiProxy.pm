@@ -141,6 +141,12 @@ sub delete_toxic {
 # Enable all proxies and remove all active toxics
 sub reset {
     my $self = shift;
+
+    $self->client->http_verb('POST');
+    $self->client->query("reset");
+    $self->client->payload( undef );
+    $self->client->do();
+    return $self->client->response->code;
 }
 
 # Returns the server version number
