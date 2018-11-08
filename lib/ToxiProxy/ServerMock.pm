@@ -18,7 +18,8 @@ sub get_ua {
     $ua->map_response( 
         sub{
             my $r = shift;
-            return 1 if $r->method eq 'GET' && $r->uri =~ m|proxies(/{0,1})$|;
+            return 1 if $r->method eq 'GET' && 
+                        $r->uri =~ m|proxies(/{0,1})$|;
         },
         HTTP::Response->new('200','Success', 
             ['Content-Type' => 'application/json'],
@@ -37,7 +38,8 @@ sub get_ua {
     $ua->map_response( 
         sub{
             my $r = shift;
-            return 1 if $r->method eq 'POST' && $r->uri =~ m|proxies(/{0,1})$|;
+            return 1 if $r->method eq 'POST' && 
+                        $r->uri =~ m|proxies(/{0,1})$|;
         },
         HTTP::Response->new('201','Created', 
             ['Content-Type' => 'application/json'],
@@ -55,7 +57,8 @@ sub get_ua {
     $ua->map_response( 
         sub{
             my $r = shift;
-            return 1 if $r->method eq 'POST' && $r->uri =~ m|populate|;
+            return 1 if $r->method eq 'POST' && 
+                        $r->uri =~ m|populate|;
         },
         HTTP::Response->new('201','Created', 
             ['Content-Type' => 'application/json'],
@@ -75,7 +78,8 @@ sub get_ua {
     $ua->map_response( 
         sub{
             my $r = shift;
-            return 1 if $r->method eq 'GET' && $r->uri =~ m|proxies/(\w+)$|;
+            return 1 if $r->method eq 'GET' && 
+                        $r->uri =~ m|proxies/(\w+)$|;
         },
         HTTP::Response->new('200','Success', 
             ['Content-Type' => 'application/json'],
@@ -92,7 +96,8 @@ sub get_ua {
     $ua->map_response( 
         sub{
             my $r = shift;
-            return 1 if $r->method eq 'POST' && $r->uri =~ m|proxies/(\w+)$|;
+            return 1 if $r->method eq 'POST' && 
+                        $r->uri =~ m|proxies/(\w+)$|;
         },
         HTTP::Response->new('200','OK', 
             ['Content-Type' => 'application/json'],
@@ -109,7 +114,8 @@ sub get_ua {
     $ua->map_response( 
         sub{
             my $r = shift;
-            return 1 if $r->method eq 'DELETE' && $r->uri =~ m|proxies/(\w+)$|;
+            return 1 if $r->method eq 'DELETE' && 
+                        $r->uri =~ m|proxies/(\w+)$|;
         },
         HTTP::Response->new('204','No Content'
     ));
@@ -118,7 +124,8 @@ sub get_ua {
     $ua->map_response( 
         sub{
             my $r = shift;
-            return 1 if $r->method eq 'POST' && $r->uri =~ m|proxies/(\w+)/toxics(/{0,1})$|;
+            return 1 if $r->method eq 'POST' && 
+                        $r->uri =~ m|proxies/(\w+)/toxics(/{0,1})$|;
         },
         HTTP::Response->new('200','OK', 
             ['Content-Type' => 'application/json'],
@@ -135,7 +142,8 @@ sub get_ua {
     $ua->map_response( 
         sub{
             my $r = shift;
-            return 1 if $r->method eq 'GET' && $r->uri =~ m|proxies/(\w+)/toxics(/{0,1})$|;
+            return 1 if $r->method eq 'GET' && 
+                        $r->uri =~ m|proxies/(\w+)/toxics(/{0,1})$|;
         },
         HTTP::Response->new('200','Success', 
             ['Content-Type' => 'application/json'],
@@ -145,6 +153,24 @@ sub get_ua {
                     "stream"    => "downstream",
                     "attributes"=> {"latency"=> 200}
           }])
+    ));
+
+    # GET /proxies/{proxy}/toxics/{toxic}
+    $ua->map_response( 
+        sub{
+            my $r = shift;
+            return 1 if $r->method eq 'GET' && 
+                        $r->uri =~ m|proxies/(\w+)/toxics/(\w+)(/{0,1})$|;
+        },
+        HTTP::Response->new('200','Success', 
+            ['Content-Type' => 'application/json'],
+            encode_json({
+                    "name"      => "toxic-1",
+                    "type"      => "latency",
+                    "stream"    => "downstream",
+                    "attributes"=> {"latency"=> 200, jitter => 0},
+                    "toxicity"  => 1
+          })
     ));
 
     return $ua;

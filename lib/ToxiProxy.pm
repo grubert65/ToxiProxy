@@ -112,6 +112,11 @@ sub add_toxic {
 # Get an active toxic's fields
 sub get_toxic {
     my ( $self, $proxy_name, $toxic_name) = @_;
+
+    $self->client->http_verb('GET');
+    $self->client->query("proxies/$proxy_name/toxics/$toxic_name");
+    $self->client->payload( undef );
+    $self->client->do();
 }
 
 # Update an active toxic
