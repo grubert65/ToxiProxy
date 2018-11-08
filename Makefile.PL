@@ -15,10 +15,15 @@ WriteMakefile(
         'ExtUtils::MakeMaker' => '0',
     },
     BUILD_REQUIRES => {
-        'Test::More' => '0',
+        'Test::More'            => '0',
+        'Proc::Find'            => 0,
+        'Test::LWP::UserAgent'  => 0,
     },
     PREREQ_PM => {
-        'Proc::Find'    => 0,
+        'JSON::XS'              => 0,
+        'Moo'                   => 0,
+        'RestAPI'               => 0,
+        'Types::Standard'       => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'ToxiProxy-*' },

@@ -3,8 +3,6 @@ our $VERSION = '0.01';
 use Moo;
 use Types::Standard qw( Str Int );
 use RestAPI;
-use Try::Tiny;
-use Data::Printer;
 use ToxiProxy::Proxy;
 
 has 'host'      => ( is => 'rw', isa => Str, default => 'localhost' );

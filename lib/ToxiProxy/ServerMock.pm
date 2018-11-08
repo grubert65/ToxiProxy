@@ -1,6 +1,6 @@
 package ToxiProxy::ServerMock;
 use v5.14;
-use Moose;
+use Moo;
 use Test::LWP::UserAgent;
 use JSON::XS;
 
