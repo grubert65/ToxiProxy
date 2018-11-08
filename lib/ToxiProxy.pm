@@ -119,12 +119,23 @@ sub get_toxic {
 
 # Update an active toxic
 sub update_toxic {
-    my ($self,  $proxy_name, $toxic) = @_;
+    my ($self,  $proxy_name, $toxic_name, $toxic_fields) = @_;
+
+    $self->client->http_verb('POST');
+    $self->client->query("proxies/$proxy_name/toxics/$toxic_name");
+    $self->client->payload( $toxic_fields );
+    $self->client->do();
 }
 
 # Remove an active toxic
 sub delete_toxic {
     my ( $self, $proxy_name, $toxic_name ) = @_;
+
+    $self->client->http_verb('DELETE');
+    $self->client->query("proxies/$proxy_name/toxics/$toxic_name");
+    $self->client->payload( undef );
+    $self->client->do();
+    return $self->client->response->code;
 }
 
 # Enable all proxies and remove all active toxics
@@ -156,10 +167,6 @@ ToxiProxy - The great new ToxiProxy!
 Version 0.01
 
 =head1 SYNOPSIS
-
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
 
     use ToxiProxy;
     

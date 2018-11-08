@@ -117,8 +117,8 @@ sub get_ua {
             return 1 if $r->method eq 'DELETE' && 
                         $r->uri =~ m|proxies/(\w+)$|;
         },
-        HTTP::Response->new('204','No Content'
-    ));
+        HTTP::Response->new('204','No Content')
+    );
 
     # POST /proxies/{proxy}/toxics
     $ua->map_response( 
@@ -172,6 +172,34 @@ sub get_ua {
                     "toxicity"  => 1
           })
     ));
+
+    # POST /proxies/{proxy}/toxics/{toxic}
+    $ua->map_response( 
+        sub{
+            my $r = shift;
+            return 1 if $r->method eq 'POST' && 
+                        $r->uri =~ m|proxies/(\w+)/toxics/(\w+)(/{0,1})$|;
+        },
+        HTTP::Response->new('200','Success', 
+            ['Content-Type' => 'application/json'],
+            encode_json({
+                    "name"      => "toxic-1",
+                    "type"      => "latency",
+                    "stream"    => "downstream",
+                    "attributes"=> {"latency"=> 200, jitter => 0},
+                    "toxicity"  => 1
+          })
+    ));
+
+    # DELETE /proxies/{proxy}/toxics/{toxic}
+    $ua->map_response( 
+        sub{
+            my $r = shift;
+            return 1 if $r->method eq 'DELETE' && 
+                        $r->uri =~ m|proxies/(\w+)/toxics/(\w+)(/{0,1})$|;
+        },
+        HTTP::Response->new('204','No Content')
+    );
 
     return $ua;
 }
