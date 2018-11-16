@@ -1,10 +1,11 @@
 package ToxiProxy::Toxic;
-use Moose;
+use Moo;
+use Types::Standard qw( Str Num HashRef );
 
-has ['name', 'type'] => ( is => 'rw', isa => 'Str', required => 1 );
-has 'stream'         => ( is => 'rw', isa => 'Str' );
-has 'toxicity'       => ( is => 'rw', isa => 'Num' );
-has 'attributes'     => ( is => 'rw', isa => 'HashRef' );
+has ['name', 'type'] => ( is => 'rw', isa => Str, required => 1 );
+has 'stream'         => ( is => 'rw', isa => Str );
+has 'toxicity'       => ( is => 'rw', isa => Num );
+has 'attributes'     => ( is => 'rw', isa => HashRef );
 
 sub BUILD {
     my $self = shift;

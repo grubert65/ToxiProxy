@@ -22,6 +22,7 @@ WriteMakefile(
     PREREQ_PM => {
         'JSON::XS'              => 0,
         'Moo'                   => 0,
+        'Moose'                 => 0,
         'RestAPI'               => 0,
         'Types::Standard'       => 0,
     },
