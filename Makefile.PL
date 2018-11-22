@@ -23,7 +23,7 @@ WriteMakefile(
         'JSON::XS'              => 0,
         'Moo'                   => 0,
         'Moose'                 => 0,
-        'RestAPI'               => 0,
+        'RestAPI'               => '0.09',
         'Types::Standard'       => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
