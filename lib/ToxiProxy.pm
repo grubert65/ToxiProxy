@@ -29,7 +29,7 @@ sub get_proxies {
     $self->client->query('proxies');
     $self->client->payload( undef );
     my $data = $self->client->do();
-    $data = [$data] unless ref $data eq 'ARRAY';
+#     $data = [$data] unless ref $data eq 'ARRAY';
     # TODO : we should convert data into an array of Proxy...
     return $data;
 }
